@@ -1,35 +1,8 @@
 "use strict";
 
-// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
- 
-// requestAnimationFrame polyfill by Erik Möller
-// fixes from Paul Irish and Tino Zijdel
- 
-(function() {
-    var lastTime = 0;
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-                                   || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
- 
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-              timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
- 
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-}());
+// Based on https://github.com/pguso/jquery-plugin-circliful
+// Cleaned up version found https://github.com/rikh42/jquery-plugin-circliful
+
 
 (function ($) {
 
@@ -37,28 +10,28 @@
 
         var settings = $.extend({
             // These are the defaults.
-            foregroundColor: "#3498DB",     // Colour of the line
-            backgroundColor: "#ccc",        // Colour of the channel for the line to fill
+            foregroundColor: "#4687b8",     // Colour of the line
+            backgroundColor: "#959DA1",     // Colour of the channel for the line to fill
             fillColor: 'none',              // Fill the circle with this
             pointColor: "none",             // Colour of the inner circle (around the percentage)
             pointSize: 57,                  // Size of the inner circle
             
             foregroundBorderWidth: 15,      // Width of the line
-            backgroundBorderWidth: 15,      // Width of the lines channel
+            backgroundBorderWidth: 2,       // Width of the lines channel
             
             percent: 75,                    // What percent if this chart going to represent
 
-            fontColor: '#aaa',              // Colour of the percentage text       
+            fontColor: '#959DA1',           // Colour of the percentage text       
             
             animation: true,                // animate it?
-            animationStep: 5,               // Number of degrees to animate per step
+            animationStep: 3,               // Number of degrees to animate per step
             
             icon: 'none',                   // Show an icon in the middle or not
             iconSize: 40,                   // Font size of the icon
             iconColor: '#ccc',              // Colour of the icon
             
             showPercent: true,              // Show the percentage?
-            percentageTextSize: 22,         // Font size of the percentage
+            percentageTextSize: 40,         // Font size of the percentage
             
             text: null,                     // Additional text
             textStyle: '',                  // Css for the additional text  
