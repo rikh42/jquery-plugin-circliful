@@ -38,9 +38,31 @@
             textColor: '#666'               // colour of the additional text
         }, options);
 
+        var circle, percent, angle, strokeLength, myTimer;
+
+
+        function drawFrame() {
+            
+            requestAnimationFrame(function() {
+                drawFrame();
+            });
+
+            angle += settings.animationStep;
+            if (angle >= 360 * settings.percent / 100) {
+                cancelAnimationFrame(drawFrame);
+                angle = 360 * settings.percent / 100;
+            }
+
+            circle.attr("stroke-dasharray", angle / 360 * strokeLength + ", 20000");
+
+            if (settings.showPercent) {
+                myTimer.text(parseInt(angle / 360 * 100) + '%');
+            }
+        }
+
+
         return this.each(function () {
             var circleContainer = $(this),
-                percent = settings.percent,
                 textY = 100,
                 textX = 100,
                 elements = '',
@@ -72,7 +94,7 @@
             }
 
             // Length of the line (so we can animate it via dash pattern)
-            var strokeLength = 2 * radius * 3.1415927;
+            strokeLength = 2 * radius * 3.1415927;
             circleContainer
                 .addClass('svg-container')
                 .append(
@@ -84,34 +106,18 @@
                         innerText)
                 );
 
-            var circle = circleContainer.find('.circle'),
-                myTimer = circleContainer.find('.timer'),
-                angle = 0;
+            circle = circleContainer.find('.circle');
+            myTimer = circleContainer.find('.timer');
+            angle = 0;
 
             if (settings.animation) {
-                function drawFrame() {
-                    requestAnimationFrame(drawFrame);
-
-                    angle += settings.animationStep;
-                    if (angle >= 360 * percent / 100) {
-                        cancelAnimationFrame(drawFrame);
-                        angle = 360 * percent / 100;
-                    }
-
-                    circle.attr("stroke-dasharray", angle / 360 * strokeLength + ", 20000");
-
-                    if (settings.showPercent) {
-                        myTimer.text(parseInt(angle / 360 * 100) + '%');
-                    }
-                }
-
                 // trigger the animation
                 drawFrame();
             } else {
-                circle.attr("stroke-dasharray", (strokeLength * percent / 100) + ", 20000");
+                circle.attr("stroke-dasharray", (strokeLength * settings.percent / 100) + ", 20000");
 
                 if (settings.showPercent) {
-                    myTimer.text(percent + '%');
+                    myTimer.text(settings.percent + '%');
                 }
             }
         });
